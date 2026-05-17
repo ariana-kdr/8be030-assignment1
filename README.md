@@ -26,8 +26,7 @@ Chaymae:
 
 ### REQUIREMENTS
 
-Put these commands in your anaconda prompt to download the packages we need (we now need cv2)
-
+Run these commands in your anaconda prompt to download the packages we need BEFORE you try running Registration_project.ipnyb
 ```
 conda activate 8be030 					    # activate your environment using whatever name you called it 
 pip install -r requirements.txt     # install the required packages
@@ -35,8 +34,7 @@ pip install -r requirements.txt     # install the required packages
 
 ### REPO STRUCTURE
 
-8BE030
-.
+```
 |____code
 | |____registration.py
 | |____registration_tests.py
@@ -48,6 +46,9 @@ pip install -r requirements.txt     # install the required packages
 | |____0.1_Software_guide.ipynb
 | |____1.1_Geometrical_transformations.ipynb
 | |____1.2_Point-based_registration.ipynb
-| |____...
+| |____1.4_Intensity-based_registration.ipnyb
+| |____1.5_Validation_in_medical_image_analysis_part_1.ipnyb
+| |____1.6_Registration_project.ipnyb
 |____README.md
 |____requirements.txt
+```
