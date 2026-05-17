@@ -189,6 +189,9 @@ def intensity_based_registration(I, Im, x, mu, num_iter, name, fun):
         # for visualization of the result
         S, Im_t, _ = fun(x)
 
+        # save similarity
+        similarity[k] = S
+
         clear_output(wait = True)
 
         # update moving image and parameters
@@ -203,6 +206,13 @@ def intensity_based_registration(I, Im, x, mu, num_iter, name, fun):
         
     plt.close(fig)  # prevents Jupyter from showing the figure a second time
 
+    final_similarity = similarity[-1][0]
+
+    similarity_std = np.nanstd(similarity)
+
+    converged = similarity_std < 0.05
+    return Im_t, final_similarity, num_iter, converged, similarity
+
 
 def gaussian_noise(img, mean, st_dev, display):
     # Add Gaussian noise to input image 
@@ -215,7 +225,13 @@ def gaussian_noise(img, mean, st_dev, display):
     #     img_noise - output image with Gaussian noise
 
     # Convert input image to grayscale
-    img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    if len(img.shape) == 3:
+        img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    else:
+        img_gray = img.copy()
+
+    # Ensure float for noise addition
+    img_gray = img_gray.astype(np.float32)
 
     # Draw random samples from a Gaussian distribution with the same size as the gray image 
     noise = np.random.normal(mean, st_dev, img_gray.shape)
@@ -224,7 +240,7 @@ def gaussian_noise(img, mean, st_dev, display):
     img_noise = img_gray + noise
 
     # Remove out of range colour values 
-    img_clip = np.clip(img_noise, 0, 255)
+    img_clip = np.clip(img_noise, 0, 255).astype(np.uint8)
 
     # Display both the input image and the image with Gaussian noise
     if display == 'yes':
@@ -232,12 +248,39 @@ def gaussian_noise(img, mean, st_dev, display):
     
         # Add input image on the left
         ax1 = fig.add_subplot(121)
-        im1 = ax1.imshow(img_gray)
+        im1 = ax1.imshow(img_gray, cmap='gray')
         ax1.set_title('Original Image')
     
         # Add grey image on the right with mean and stdev info
         ax2 = fig.add_subplot(122)
-        im2 = ax2.imshow(img_clip) #, cmap='gray')
+        im2 = ax2.imshow(img_clip, cmap='gray')
         ax2.set_title(f'Gaussian Noise: μ={mean}, σ={st_dev}')
 
+        plt.show()
+
     return img_clip
+
+
+def evaluate_registration(
+        fixed_img,
+        moving_img,
+        registered_img,
+        similarity_value,
+        iterations,
+        converged):
+
+    # Registration error (Mean Squared Error)
+    registration_error = np.mean((fixed_img.astype(np.float32)
+                                  - registered_img.astype(np.float32))**2)
+
+    # Optimizer stability
+    # Example criterion:
+    # stable if optimizer converged before max iterations
+    stability = 1 if converged else 0
+
+    # Failure criterion
+    # Example threshold
+    failure = 1 if registration_error > 1000 else 0
+
+    return registration_error, stability, failure
+
