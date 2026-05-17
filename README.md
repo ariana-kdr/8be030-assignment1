@@ -24,12 +24,33 @@ Chaymae:
 - Write the Introduction, Study Design and Methods section (you can ask in the GC if something is not clear) 
 
 
-### REQUIREMENTS
-
+### IMPORTANT FOR RUNNING THE NOTEBOOK
+**Install all requirements**
 Run these commands in your anaconda prompt to download the packages we need BEFORE you try running Registration_project.ipnyb
 ```
 conda activate 8be030 					    # activate your environment using whatever name you called it 
 pip install -r requirements.txt     # install the required packages
+```
+**Importing packages**
+Run these blocks at the top of 1.6_Registration_project.ipnyb so you don't need to run any other blocks throughout the notebook for importing stuff. 
+```
+%load_ext autoreload
+%autoreload 2
+```
+```
+import sys
+import numpy as np
+from scipy import ndimage
+import matplotlib.pyplot as plt
+import cv2 
+
+sys.path.append("../code")
+import registration as reg
+import registration_util as util
+from registration_project import intensity_based_registration_demo
+from registration_project import intensity_based_registration
+from registration_project import get_params
+from registration_project import gaussian_noise
 ```
 
 ### REPO STRUCTURE
