@@ -16,7 +16,7 @@ Cecilia:
 
 Yousra:
 - Move explanations in colab notebook to this repo and push the updated file
-- You do not need to specifically rerun any code blocks because the notebook should already have all the updated plots, just add the text block explanations under each plot
+- You might have to change some explanations because we made some changes to the code during last week's meeting 
 - Check ALL the explanations in the registration_project notebook make sense, for all the questions
 
 Chaymae:
