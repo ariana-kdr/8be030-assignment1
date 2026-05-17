@@ -101,7 +101,10 @@ def get_params(I, Im, similarity):
     #     Im         - the moving image
     #     similarity - which measure is being used, EITHER rigid_corr OR affine_corr OR affine_mi
     # OUTPUT:
-    #     img_noise - output image with Gaussian noise
+    #     x    - the correct array, either for rigid or affine 
+    #     name - the name of the similarity measure being used as a string, to put in the plots later
+    #     fun  - the call for the similarity measure function
+    
     if similarity == 'rigid_corr':
         x = np.array([0., 0., 0.])
         name = "Rigid NCC" 
@@ -124,7 +127,6 @@ def get_params(I, Im, similarity):
 
 
 def intensity_based_registration(I, Im, x, mu, num_iter, name, fun):
-
     # Same function as above, but modularised to take arguments 
     # INPUT: 
     #     I        - the fixed image 
