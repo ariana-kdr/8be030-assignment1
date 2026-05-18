@@ -203,15 +203,15 @@ def intensity_based_registration(I, Im, x, mu, num_iter, name, fun):
         learning_curve.set_ydata(similarity)
 
         display(fig)
-        
-    plt.close(fig)  # prevents Jupyter from showing the figure a second time
+    
+    #plt.close(fig)  # prevents Jupyter from showing the figure a second time
 
     final_similarity = similarity[-1][0]
 
     similarity_std = np.nanstd(similarity)
 
     converged = similarity_std < 0.05
-    return Im_t, final_similarity, num_iter, converged, similarity
+    return Im_t, final_similarity, num_iter, converged, similarity, fig
 
 
 def gaussian_noise(img, mean, st_dev, display):
