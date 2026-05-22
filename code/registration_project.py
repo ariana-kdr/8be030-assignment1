@@ -20,7 +20,6 @@ def intensity_based_registration_demo():
     # we start with the identity transformation
     # most likely you will not have to change these
     x = np.array([0., 0., 0.])          # Rigid
-    # x = np.array([0., 1., 1., 0., 0., 0., 0. ])
 
     
     # NOTE: for affine registration you have to initialize
@@ -33,9 +32,7 @@ def intensity_based_registration_demo():
     # are fixed and the only remaining parameter is the vector x with the
     # parameters of the transformation
     fun = lambda x: reg.rigid_corr(I, Im, x, return_transform=False)
-    # fun = lambda x: reg.affine_corr(I, Im, x, return_transform=False)
-    # fun = lambda x: reg.affine_mi(I, Im, x, return_transform=False)
-
+    
     # the learning rate
     mu = 0.001
     
@@ -77,8 +74,6 @@ def intensity_based_registration_demo():
 
         # for visualization of the result
         S, Im_t, _ = reg.rigid_corr(I, Im, x, return_transform=True)
-        # S, Im_t, _ = reg.affine_corr(I, Im, x, return_transform=True)
-        # S, Im_t, _ = reg.affine_mi(I, Im, x, return_transform=True)
 
         clear_output(wait = True)
 
@@ -101,7 +96,7 @@ def get_params(I, Im, similarity):
     #     Im         - the moving image
     #     similarity - which measure is being used, EITHER rigid_corr OR affine_corr OR affine_mi
     # OUTPUT:
-    #     x    - the correct array, either for rigid or affine 
+    #     x    - the initialisation array, either for rigid or affine 
     #     name - the name of the similarity measure being used as a string, to put in the plots later
     #     fun  - the call for the similarity measure function
     
@@ -204,13 +199,14 @@ def intensity_based_registration(I, Im, x, mu, num_iter, name, fun):
 
         display(fig)
     
-    #plt.close(fig)  # prevents Jupyter from showing the figure a second time
+    # plt.close(fig)  # prevents Jupyter from showing the figure a second time
 
     final_similarity = similarity[-1][0]
 
     similarity_std = np.nanstd(similarity)
 
     converged = similarity_std < 0.05
+
     return Im_t, final_similarity, num_iter, converged, similarity, fig
 
 
@@ -273,14 +269,5 @@ def evaluate_registration(
     registration_error = np.mean((fixed_img.astype(np.float32)
                                   - registered_img.astype(np.float32))**2)
 
-    # Optimizer stability
-    # Example criterion:
-    # stable if optimizer converged before max iterations
-    stability = 1 if converged else 0
-
-    # Failure criterion
-    # Example threshold
-    failure = 1 if registration_error > 1000 else 0
-
-    return registration_error, stability, failure
+    return registration_error
 
